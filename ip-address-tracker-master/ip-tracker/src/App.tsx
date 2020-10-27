@@ -1,17 +1,23 @@
 import React, {useState} from 'react';
 import './App.css';
+import axios from 'axios';
 
 function App() {
   const [ipAddress, setIpAddress] = useState({ 
     ipAddress: ""
   })
+  const [ipData, setIpData] = useState({})
 
   const handleChange = function (event:any) {
     setIpAddress({ ipAddress: event.target.value})
   }
 
   const lookupIpAddress = function(IpAddress:{ipAddress:string}) {
-    
+    if (ipAddress.ipAddress === "") {
+      const ip = "8.8.8.8"
+      const apiKey = "at_TRBYrFOIjsPy2m3153j3tysb2gHeO"
+
+    }
   }
 
   return (
