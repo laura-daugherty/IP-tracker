@@ -2,6 +2,18 @@ import React, {useState} from 'react';
 import './App.css';
 import axios from 'axios';
 
+type Res = {
+  ip?: string;
+  isp?: string;
+  location?: {
+    city: string;
+    postalCode: string;
+    region: string;
+    timezone: string;
+  }
+};
+type Domains = string[];
+
 function App() {
   const [ipAddress, setIpAddress] = useState({ 
     ipAddress: ""
@@ -13,13 +25,84 @@ function App() {
   }
 
   const lookupIpAddress = function(IpAddress:{ipAddress:string}) {
+    const apiKey = "at_TRBYrFOIjsPy2m3153j3tysb2gHeO"
     if (ipAddress.ipAddress === "") {
-      const ip = "8.8.8.8"
-      const apiKey = "at_TRBYrFOIjsPy2m3153j3tysb2gHeO"
-
+      axios
+        .get("https://geo.ipify.org/api/v1", {
+          params: {apiKey}
+        }) 
+        .then((response) => {
+          console.log(response)
+          setIpData(response.data)
+        })
+    } else {
+      // axios
+      //   .get("https://geo.ipify.org/api/v1", {
+      //     params: {apiKey}, 
+      //     data: {ipAddress: {ipAddress}}
+      //   }) 
+      //   .then((response) => {
+      //     console.log(response)
+      //   })
     }
   }
 
+
+  const displayAddress = function(ipData: Res) {
+    if (ipData) {
+      return (
+        <div>
+          {ipData.ip}
+        </div>
+      )
+    } else {
+      return (
+        <div/>
+      )
+    }
+  }
+
+  const displayLocation = function(ipData: Res) {
+    if (ipData && ipData.location) {
+      return (
+        <div>
+          {ipData.location.city}, {ipData.location.region} {ipData.location.postalCode}
+        </div>
+      )
+    } else {
+      return (
+        <div/>
+      )
+    }
+  }
+
+  const displayTimezone = function(ipData: Res) {
+    if (ipData && ipData.location) {
+      return (
+        <div>
+          {ipData.location.timezone}
+        </div>
+      )
+    } else {
+      return (
+        <div/>
+      )
+    }
+  }
+
+  const displayISP = function(ipData: Res) {
+    if (ipData) {
+      return (
+        <div>
+          {ipData.isp}
+        </div>
+      )
+    } else {
+      return (
+        <div/>
+      )
+    }
+  }
   return (
     <div className="App">
       <div className="purple"/>
@@ -36,7 +119,7 @@ function App() {
           placeholder="Enter IP address here"
         />
         <button onClick={() => lookupIpAddress(ipAddress)}>
-          >
+          hi
         </button>
       </div>
       <div>
@@ -44,38 +127,41 @@ function App() {
           <h3>
             IP ADDRESS
           </h3>
-          {/* <h2>
-            {ip address}
-          </h2> */}
+          <h2>
+            {displayAddress(ipData)}
+          </h2>
         </div>
         <div>
           <h3>
             LOCATION
           </h3>
-          {/* <h2>
-            {location}
-          </h2> */}
+          <h2>
+            {displayLocation(ipData)}
+          </h2>
         </div>
         <div>
           <h3>
             TIMEZONE
           </h3>
-          {/* <h2>
-            {timezone}
-          </h2> */}
+          <h2>
+            {displayTimezone(ipData)}
+          </h2>
         </div>
         <div>
           <h3>
             ISP
           </h3>
-          {/* <h2>
-            {isp}
-          </h2> */}
+          <h2>
+            {displayISP(ipData)}
+          </h2>
         </div>
       </div>
       <div className="map"/>
     </div>
   );
+
+
 }
 
 export default App;
+
