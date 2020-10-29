@@ -12,7 +12,6 @@ type Res = {
     timezone: string;
   }
 };
-type Domains = string[];
 
 function App() {
   const [ipAddress, setIpAddress] = useState({ 
@@ -34,16 +33,21 @@ function App() {
         .then((response) => {
           console.log(response)
           setIpData(response.data)
+        }, (error) => {
+          console.log("error", error)
         })
     } else {
-      // axios
-      //   .get("https://geo.ipify.org/api/v1", {
-      //     params: {apiKey}, 
-      //     data: {ipAddress: {ipAddress}}
-      //   }) 
-      //   .then((response) => {
-      //     console.log(response)
-      //   })
+      axios
+        .get("https://cors-anywhere.herokuapp.com/https://geo.ipify.org/api/v1", {
+          params: {apiKey}, 
+          data: {ipAddress}
+        }) 
+        .then((response) => {
+          console.log(response)
+          setIpData(response.data)
+        }, (error) => {
+          console.log("error", error)
+        })
     }
   }
 
