@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
 import axios from 'axios';
-
+import L, {Map} from 'leaflet';
+import arrow from "./images/icon-arrow.svg"
+import icon from "./images/icon-location.svg"
 type Res = {
   ip?: string;
   isp?: string;
@@ -10,10 +12,45 @@ type Res = {
     postalCode: string;
     region: string;
     timezone: string;
+    lat: number;
+    lng: number;
   }
 };
 
+
+let mymap: Map
+var locIcon = L.icon({
+  iconUrl: icon,
+});
+
+const getDefaultData = function() {
+  const apiKey = "at_TRBYrFOIjsPy2m3153j3tysb2gHeO"
+    axios
+    .get("https://geo.ipify.org/api/v1", {
+      params: {apiKey}
+    }) 
+    .then((response) => {
+      console.log(response)
+      mymap = L.map('mapid').setView([response.data.location.lat, response.data.location.lng], 13); 
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoibGF1cmFkYXVnaGVydHk2IiwiYSI6ImNrZ3Y1bDNtMzAwYXczMm1oZzB1d2JlbXAifQ._ETkRKDE53zkD46J-Tw-bA'
+      }).addTo(mymap);
+      L.marker([response.data.location.lat, response.data.location.lng], {icon: locIcon}).addTo(mymap)
+      console.log("mymap",mymap)
+    }, (error) => {
+      console.log("error", error)
+    })
+  }
+
+getDefaultData()
+ 
 function App() {
+
   const [ipAddress, setIpAddress] = useState({ 
     ipAddress: ""
   })
@@ -25,7 +62,8 @@ function App() {
 
   const lookupIpAddress = function(IpAddress:{ipAddress:string}) {
     const apiKey = "at_TRBYrFOIjsPy2m3153j3tysb2gHeO"
-    if (ipAddress.ipAddress === "") {
+    if (ipAddress.ipAddress === "" && mymap) {
+      mymap.remove()
       axios
         .get("https://geo.ipify.org/api/v1", {
           params: {apiKey}
@@ -33,10 +71,21 @@ function App() {
         .then((response) => {
           console.log(response)
           setIpData(response.data)
+          mymap = L.map('mapid').setView([response.data.location.lat, response.data.location.lng], 13); 
+          L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoibGF1cmFkYXVnaGVydHk2IiwiYSI6ImNrZ3Y1bDNtMzAwYXczMm1oZzB1d2JlbXAifQ._ETkRKDE53zkD46J-Tw-bA'
+          }).addTo(mymap)
+          L.marker([response.data.location.lat, response.data.location.lng], {icon: locIcon}).addTo(mymap)
         }, (error) => {
           console.log("error", error)
         })
     } else {
+      mymap.remove()
       axios
         .get("https://cors-anywhere.herokuapp.com/https://geo.ipify.org/api/v1", {
           params: {apiKey}, 
@@ -45,6 +94,16 @@ function App() {
         .then((response) => {
           console.log(response)
           setIpData(response.data)
+          mymap = L.map('mapid').setView([response.data.location.lat, response.data.location.lng], 13); 
+          L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoibGF1cmFkYXVnaGVydHk2IiwiYSI6ImNrZ3Y1bDNtMzAwYXczMm1oZzB1d2JlbXAifQ._ETkRKDE53zkD46J-Tw-bA'
+          }).addTo(mymap);
+          L.marker([response.data.location.lat, response.data.location.lng], {icon: locIcon}).addTo(mymap)
         }, (error) => {
           console.log("error", error)
         })
@@ -84,7 +143,7 @@ function App() {
     if (ipData && ipData.location) {
       return (
         <div>
-          {ipData.location.timezone}
+          UTC {ipData.location.timezone}
         </div>
       )
     } else {
@@ -123,7 +182,7 @@ function App() {
           placeholder="Enter IP address here"
         />
         <button onClick={() => lookupIpAddress(ipAddress)}>
-          hi
+          <input type="image" src={arrow} />
         </button>
       </div>
       <div>
@@ -160,11 +219,8 @@ function App() {
           </h2>
         </div>
       </div>
-      <div className="map"/>
     </div>
   );
-
-
 }
 
 export default App;
