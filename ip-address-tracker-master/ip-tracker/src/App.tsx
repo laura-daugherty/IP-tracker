@@ -114,13 +114,13 @@ function App() {
   const displayAddress = function(ipData: Res) {
     if (ipData) {
       return (
-        <div>
+        <div className="answer-div">
           {ipData.ip}
         </div>
       )
     } else {
       return (
-        <div/>
+        <div className="answer-div"/>
       )
     }
   }
@@ -128,13 +128,13 @@ function App() {
   const displayLocation = function(ipData: Res) {
     if (ipData && ipData.location) {
       return (
-        <div>
+        <div className="answer-div">
           {ipData.location.city}, {ipData.location.region} {ipData.location.postalCode}
         </div>
       )
     } else {
       return (
-        <div/>
+        <div className="answer-div"/>
       )
     }
   }
@@ -142,13 +142,13 @@ function App() {
   const displayTimezone = function(ipData: Res) {
     if (ipData && ipData.location) {
       return (
-        <div>
+        <div className="answer-div">
           UTC {ipData.location.timezone}
         </div>
       )
     } else {
       return (
-        <div/>
+        <div className="answer-div"/>
       )
     }
   }
@@ -156,37 +156,37 @@ function App() {
   const displayISP = function(ipData: Res) {
     if (ipData) {
       return (
-        <div>
+        <div className="answer-div">
           {ipData.isp}
         </div>
       )
     } else {
       return (
-        <div/>
+        <div className="answer-div"/>
       )
     }
   }
   return (
     <div className="App">
-      <div className="purple"/>
-      <header className="app-header">
-        <h1>
-          IP Address Tracker
-        </h1>
-      </header>
-      <div>
-      <input
-          className="input"
-          type="text"
-          onChange={handleChange}
-          placeholder="Enter IP address here"
-        />
-        <button onClick={() => lookupIpAddress(ipAddress)}>
-          <input type="image" src={arrow} />
-        </button>
+        <header className="app-header">
+          <h1>
+            IP Address Tracker
+          </h1>
+        </header>
+        <div className="input-div">
+          <input
+            className="input"
+            type="text"
+            onChange={handleChange}
+            placeholder="Enter IP address here"
+          />
+          <button onClick={() => lookupIpAddress(ipAddress)}>
+            <input className="image-input" type="image" src={arrow} />
+          </button>
       </div>
-      <div>
-        <div>
+      
+      <div className="infoDiv">
+        <div className="info-section">
           <h3>
             IP ADDRESS
           </h3>
@@ -194,7 +194,7 @@ function App() {
             {displayAddress(ipData)}
           </h2>
         </div>
-        <div>
+        <div className="info-section">
           <h3>
             LOCATION
           </h3>
@@ -202,7 +202,7 @@ function App() {
             {displayLocation(ipData)}
           </h2>
         </div>
-        <div>
+        <div className="info-section">
           <h3>
             TIMEZONE
           </h3>
@@ -210,7 +210,7 @@ function App() {
             {displayTimezone(ipData)}
           </h2>
         </div>
-        <div>
+        <div className="info-section">
           <h3>
             ISP
           </h3>
