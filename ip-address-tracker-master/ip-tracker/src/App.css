@@ -82,6 +82,10 @@ h3 {
   height: 20px;
 }
 @media(min-width: 1440px) {
+  .App {
+    background-repeat: no-repeat;
+    background-size: cover
+  }
   .infoDiv {
     display: flex;
     justify-content: space-evenly;
