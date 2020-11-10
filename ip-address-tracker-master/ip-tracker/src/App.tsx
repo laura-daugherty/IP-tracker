@@ -112,60 +112,21 @@ function App() {
 
 
   const displayAddress = function(ipData: Res) {
-    if (ipData) {
-      return (
-        <div className="answer-div">
-          {ipData.ip}
-        </div>
-      )
-    } else {
-      return (
-        <div className="answer-div"/>
-      )
-    }
+    return (ipData?<div className="answer-div">{ipData.ip}</div>:<div className="answer-div"/>)
   }
 
   const displayLocation = function(ipData: Res) {
-    if (ipData && ipData.location) {
-      return (
-        <div className="answer-div">
-          {ipData.location.city}, {ipData.location.region} {ipData.location.postalCode}
-        </div>
-      )
-    } else {
-      return (
-        <div className="answer-div"/>
-      )
-    }
+    return (ipData && ipData.location?<div className="answer-div">{ipData.location.city}, {ipData.location.region} {ipData.location.postalCode}</div>:<div className="answer-div"/>) 
   }
 
   const displayTimezone = function(ipData: Res) {
-    if (ipData && ipData.location) {
-      return (
-        <div className="answer-div">
-          UTC {ipData.location.timezone}
-        </div>
-      )
-    } else {
-      return (
-        <div className="answer-div"/>
-      )
-    }
+    return (ipData && ipData.location? <div className="answer-div">UTC {ipData.location.timezone}</div>:<div className="answer-div"/>)
   }
 
   const displayISP = function(ipData: Res) {
-    if (ipData) {
-      return (
-        <div className="answer-div">
-          {ipData.isp}
-        </div>
-      )
-    } else {
-      return (
-        <div className="answer-div"/>
-      )
-    }
+    return (ipData?<div className="answer-div">{ipData.isp}</div>:<div className="answer-div"/>)
   }
+  
   return (
     <div className="App">
         <header className="app-header">
